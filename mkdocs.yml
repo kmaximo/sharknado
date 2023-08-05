@@ -1,5 +1,11 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 
 site_name: Sharknado Wheather
+repo_url: https://github.com/kmaximo/sharknado_wheater
+repo_name: kmaximo/sharknado_wheater
+edit_uri: tree/main/docs
+
+
 theme:
   name: material
+  language: pt-BR
