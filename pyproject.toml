@@ -2,12 +2,17 @@
 name = "sharknado"
 version = "0.1.0"
 description = ""
-authors = ["K Maximo <klinsmann_max@hotmail.com>"]
+authors = ["K Maximo"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 
+
+[tool.poetry.group.dev.dependencies]
+blue = "^0.9.1"
+isort = "^5.12.0"
+mkdocs = "^1.5.2"
 
 [build-system]
 requires = ["poetry-core"]
