@@ -38,5 +38,5 @@ line_length = 79
 lint = "blue --check --diff . && isort --check --diff ."
 docs = "mkdocs serve"
 pre_test = "task lint"
-test = "pytest -s -x --cov=sharknado_wheater -vv"
+test = "pytest -s -x --cov=sharknado -vv"
 post_test = "coverage html"
