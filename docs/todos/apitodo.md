@@ -5,7 +5,7 @@ Tarefas que precisam ser feitas para conclusão do projeto
 - Previsão do tempo
   - Feature: Requisição
     - [x] Implementar busca de informações de previsão do tempo referentes à cidade desejada pelo usuário na OpenWeatherMap API : [referência](https://openweathermap.org/api)
-    - [ ] Converter Kelvin para Celsius
+    - [x] Converter Kelvin para Celsius
   - Feature: Processamento
     - [ ] Tratamento dos resultados recebidos pelo OpenWeatherMap, transformando-os em informações mais legíveis, e gerando o gráfico, se requisitado.: [Referência oficial](https://docs.python.org/3/tutorial/errors.html#tut-userexceptions), [Referência no canal](https://youtu.be/sJpNfZqLpoI)
   - Feature: Resposta

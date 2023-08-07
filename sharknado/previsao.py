@@ -7,6 +7,8 @@ api_secret = config('API_KEY')
 
 # input('Informe o nome da cidade: ')
 
+def buscar_cidade():
+    ...
 
 def requisita_tempo(nome_da_cidade):
 

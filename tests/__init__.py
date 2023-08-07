@@ -1,1 +1,1 @@
-print('Inicio teste!')
+__version__ = '0.1.0'
