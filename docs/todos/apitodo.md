@@ -2,12 +2,14 @@
 
 Tarefas que precisam ser feitas para conclusão do projeto
 
-- Feature: Previsão do tempo
-  - [ ] Implementar novas escalas: [referência](https://en.wikipedia.org/wiki/List_of_musical_scales_and_modes)
-  - [ ] Implementar classes customizadas de erros: [Referência oficial](https://docs.python.org/3/tutorial/errors.html#tut-userexceptions), [Referência no canal](https://youtu.be/sJpNfZqLpoI)
-  - [ ] Implementar sugestões de progressões harmônicas
-  - [ ] Implementar tétrades (notas com mais de 3 acordes):  [referência](https://pt.wikipedia.org/wiki/T%C3%A9trade)
-  - [ ] Implementar Funções harmônicas (tonica, dominante, subdominante e relativos): [referência](https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_(m%C3%BAsica))
+- Previsão do tempo
+  - Feature: Requisição
+    - [x] Implementar busca de informações de previsão do tempo referentes à cidade desejada pelo usuário na OpenWeatherMap API : [referência](https://openweathermap.org/api)
+    - [ ] Converter Kelvin para Celsius
+  - Feature: Processamento
+    - [ ] Tratamento dos resultados recebidos pelo OpenWeatherMap, transformando-os em informações mais legíveis, e gerando o gráfico, se requisitado.: [Referência oficial](https://docs.python.org/3/tutorial/errors.html#tut-userexceptions), [Referência no canal](https://youtu.be/sJpNfZqLpoI)
+  - Feature: Resposta
+    - [ ] Enviar a resposta final ao usuário, contendo informações sobre a previsão do tempo, gráfico (se for solicitado) e alertas, caso haja algum
 - Feature: Gráfico com dados da previsão do tempo
 - Feature: Alertas com dados da previsão do tempo
 
