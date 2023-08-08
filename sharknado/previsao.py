@@ -1,11 +1,10 @@
+import pandas as pd
 import requests
 from decouple import config
 
 # link do open_weather: https://openweathermap.org/
 
 api_secret = config('API_KEY')
-
-# input('Informe o nome da cidade: ')
 
 
 def requisita_tempo(nome_da_cidade):
@@ -19,10 +18,18 @@ def requisita_tempo(nome_da_cidade):
         return requisicao_dic
     else:
         requisicao_dic = requisicao.json()
-        return requisicao_dic
+        return {
+            "temperatura": int(requisicao_dic["main"]["temp"] - 273.15),
+            "temperatura_min": int(requisicao_dic["main"]["temp_min"] - 273.15),
+            "temperatura_max": int(requisicao_dic["main"]["temp_max"] - 273.15),
+            "descricao": requisicao_dic["weather"][0]["description"],
+            "icon": requisicao_dic["weather"][0]["icon"],
+            "pais": requisicao_dic['sys']['country'],
+            "cidade": requisicao_dic["name"]     
+        }
 
 
-# print(requisita_tempo('sa paulo'))
+print(requisita_tempo('recife'))
 
 # descricao = requisicao_dic['weather'][0]['description']
 # temperatura = int(requisicao_dic['main']['temp'] - 273.15)
