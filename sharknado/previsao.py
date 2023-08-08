@@ -8,10 +8,6 @@ api_secret = config('API_KEY')
 # input('Informe o nome da cidade: ')
 
 
-def buscar_cidade():
-    ...
-
-
 def requisita_tempo(nome_da_cidade):
 
     link = f'https://api.openweathermap.org/data/2.5/weather?q={nome_da_cidade}&appid={api_secret}&lang=pt_br'
