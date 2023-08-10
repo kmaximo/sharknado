@@ -19,32 +19,100 @@ arquivo gerado -> sharknado/hist/cities_weather_req.csv
 ```
 """
 
-
-import pandas as pd
-import requests
 from datetime import datetime
 from decouple import config
-from pathlib import Path
+from rich.console import Console
+import pandas as pd
+import requests
 
-
+console = Console()
 api_secret = config('API_KEY')
 
 
-def requisita_tempo(nome_da_cidade):
+def get_data(nome_da_cidade: str) -> dict[str, list[str]]:
+    """
+    Realiza requisição para obter informações da previsão do tempo da cidade escolhida.
 
-    print('-----------------------------')
-    print('-Começando extração de dados-')
-    print('-----------------------------')
+    Args:
+        nome_da_cidade: Nome da Cidade que deseja saber o tempo
 
-    link = f'https://api.openweathermap.org/data/2.5/forecast?q={nome_da_cidade}&appid={api_secret}&lang=pt_br'
+    Returns:
+        requisicao: Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
+
+    Examples:
+        >>> previsao_hoje('recife')
+        [{"cod":"200","message":0,"cnt":40,"list":[{"dt":1691614800,"main":{"temp":300.17,"feels_like":301.63,"temp_min":297.63,"temp_max":300.17,}]
+
+    """
+    console.rule('Começando extração de dados')
+    
+    nome_cidade = nome_da_cidade.lower()
+    link = f'https://api.openweathermap.org/data/2.5/forecast?q={nome_cidade}&appid={api_secret}&lang=pt_br'
     requisicao = requests.get(link, verify=False)
-    dados_cidade = []
+    return requisicao
 
-    if requisicao.status_code == 200:
-        requisicao_dic = requisicao.json()
+
+def previsao_hoje(nome_da_cidade: str) -> dict[str, list[str]]:
+    """
+    Gera previsão do tempo da cidade escolhida.
+
+    Args:
+        nome_da_cidade: Nome da Cidade que deseja saber o tempo
+
+    Returns:
+        Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
+
+    Raises:
+        ValueError: A definir.
+        KeyError: A definir.
+
+    Examples:
+        >>> previsao_hoje('recife')
+        [{'pais': 'BR', 'cidade': 'Recife', 'temperatura': 28, 'temperatura_min': 28, 'temperatura_max': 28, 'descricao': 'nuvens dispersas', 'data_requisicao': '230810'}]
+
+    """
+    requisicao_hoje = get_data(nome_da_cidade)
+
+    if requisicao_hoje.status_code == 200:
+        requisicao_dic = requisicao_hoje.json()
+
+        dados_cidade_hoje = [
+            {
+                'pais': requisicao_dic['city']['country'],
+                'cidade': requisicao_dic['city']['name'],
+                'temperatura': int(
+                    requisicao_dic['list'][0]['main']['temp'] - 273.15
+                ),
+                'temperatura_min': int(
+                    requisicao_dic['list'][0]['main']['temp_min'] - 273.15
+                ),
+                'temperatura_max': int(
+                    requisicao_dic['list'][0]['main']['temp_max'] - 273.15
+                ),
+                'descricao': requisicao_dic['list'][0]['weather'][0][
+                    'description'
+                ],
+                'data_requisicao': requisicao_dic['list'][0]['dt_txt'],
+            }
+        ]
+    else:
+        print('Algo deu errado.\r\nStatus code: %s' % requisicao_hoje.status_code)
+        print(
+            'Você pode saber mais sobre o erro em: https://www.google.com.br/search?q=http+status+code+%s'
+            % requisicao_hoje.status_code
+        )
+    return dados_cidade_hoje
+
+
+def previsao_dias(nome_da_cidade):
+
+    requisicao_dias = get_data(nome_da_cidade)
+
+    if requisicao_dias.status_code == 200:
+        requisicao_dic = requisicao_dias.json()
 
         for i in range(requisicao_dic['cnt']):
-            dados_cidade = [
+            dados_cidade_dias = [
                 {
                     'pais': requisicao_dic['city']['country'],
                     'cidade': requisicao_dic['city']['name'],
@@ -60,25 +128,16 @@ def requisita_tempo(nome_da_cidade):
                     'descricao': requisicao_dic['list'][i]['weather'][0][
                         'description'
                     ],
-                    'data_requisicao': datetime.now().strftime('%y%m%d'),
+                    'data_requisicao': requisicao_dic['list'][i]['dt_txt'],
                 }
             ]
-            cidade_df = pd.DataFrame(dados_cidade)
-            cidade_df.to_csv(
-                'sharknado/hist/cities_weather_req.csv',
-                mode='a',
-                index=False,
-                header=False,
-            )
     else:
-        print('Algo deu errado.\r\nStatus code: %s' % requisicao.status_code)
+        print('Algo deu errado.\r\nStatus code: %s' % requisicao_dias.status_code)
         print(
             'Você pode saber mais sobre o erro em: https://www.google.com.br/search?q=http+status+code+%s'
-            % requisicao.status_code
+            % requisicao_dias.status_code
         )
-
-
-print(requisita_tempo('recife'))
+    return dados_cidade_dias
 
 # descricao = requisicao_dic['weather'][0]['description']
 # temperatura = int(requisicao_dic['main']['temp'] - 273.15)

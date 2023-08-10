@@ -1,9 +1,9 @@
-from sharknado.previsao import requisita_tempo
+from sharknado.previsao import previsao_hoje
 
 
 def test_previsao_true():
-    print(requisita_tempo('recife'))
+    print(previsao_hoje('recife'))
 
 
 def test_previsao_false():
-    print(requisita_tempo('sa paulo'))
+    print(previsao_hoje('sa paulo'))
