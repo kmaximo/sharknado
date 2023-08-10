@@ -1,43 +1,81 @@
+"""
+Módulo de previsão de tempo.
+
+Attributes:
+   nome_da_cidade: Nome da Cidade que deseja saber a previsão do tempo
+
+
+# PREVISAO
+
+Os dados da previsão do tempo são obtidas através da api do [open_weather](https://openweathermap.org/).
+Após a requisição é gerado um arquivo .csv para armazenar historio e para gerar os gráficos
+
+
+```py title="No seu shell interativo"
+>>> from sharknado.previsao import requisita_tempo
+>>> requisita_tempo('nome_da_cidade')
+arquivo gerado -> sharknado/hist/cities_weather_req.csv
+
+```
+"""
+
+
 import pandas as pd
 import requests
 from datetime import datetime
 from decouple import config
 from pathlib import Path
 
-# link do open_weather: https://openweathermap.org/
 
 api_secret = config('API_KEY')
 
 
-
 def requisita_tempo(nome_da_cidade):
-    
+
     print('-----------------------------')
     print('-Começando extração de dados-')
     print('-----------------------------')
 
     link = f'https://api.openweathermap.org/data/2.5/forecast?q={nome_da_cidade}&appid={api_secret}&lang=pt_br'
     requisicao = requests.get(link, verify=False)
+    dados_cidade = []
 
     if requisicao.status_code == 200:
         requisicao_dic = requisicao.json()
-        
+
         for i in range(requisicao_dic['cnt']):
-            dados_cidade = [{
-                'pais': requisicao_dic['city']['country'],
-                'cidade': requisicao_dic['city']['name'],
-                'temperatura': requisicao_dic['list'][i]['main']['temp'] - 273.15,
-                'temperatura_min': requisicao_dic['list'][i]['main']['temp_min'] - 273.15,
-                'temperatura_max': requisicao_dic['list'][i]['main']['temp_max'] - 273.15,
-                'descricao': requisicao_dic['list'][i]['weather'][0]['description'],
-                'data_requisicao': datetime.now().strftime('%y%m%d')             
-            }]
+            dados_cidade = [
+                {
+                    'pais': requisicao_dic['city']['country'],
+                    'cidade': requisicao_dic['city']['name'],
+                    'temperatura': int(
+                        requisicao_dic['list'][i]['main']['temp'] - 273.15
+                    ),
+                    'temperatura_min': int(
+                        requisicao_dic['list'][i]['main']['temp_min'] - 273.15
+                    ),
+                    'temperatura_max': int(
+                        requisicao_dic['list'][i]['main']['temp_max'] - 273.15
+                    ),
+                    'descricao': requisicao_dic['list'][i]['weather'][0][
+                        'description'
+                    ],
+                    'data_requisicao': datetime.now().strftime('%y%m%d'),
+                }
+            ]
             cidade_df = pd.DataFrame(dados_cidade)
-            cidade_df.to_csv('sharknado/hist/cities_weather_req.csv', mode='a', index=False, header=False)        
+            cidade_df.to_csv(
+                'sharknado/hist/cities_weather_req.csv',
+                mode='a',
+                index=False,
+                header=False,
+            )
     else:
         print('Algo deu errado.\r\nStatus code: %s' % requisicao.status_code)
-        print('Você pode saber mais sobre o erro em: https://www.google.com.br/search?q=http+status+code+%s' % requisicao.status_code)
-
+        print(
+            'Você pode saber mais sobre o erro em: https://www.google.com.br/search?q=http+status+code+%s'
+            % requisicao.status_code
+        )
 
 
 print(requisita_tempo('recife'))
