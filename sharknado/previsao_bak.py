@@ -19,61 +19,45 @@ arquivo gerado -> sharknado/hist/cities_weather_req.csv
 ```
 """
 
+from datetime import datetime
 from decouple import config
-from configparser import ConfigParser
-from urllib import parse
-from urllib3.exceptions import InsecureRequestWarning
-import json
+from rich.console import Console
 import pandas as pd
 import requests
 
-# Suppress only the single warning from urllib3 needed.
-requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
-
-# Set `verify=False` on `requests.post`.
-#requests.post(url='https://example.com', data={'bar':'baz'}, verify=False)
-
-
+console = Console()
 api_secret = config('API_KEY')
 
 
-
-def get_data(nome_da_cidade: str, imperial=False):
+def get_data(nome_da_cidade: str) -> dict[str, list[str]]:
     """
     Realiza requisição para obter informações da previsão do tempo da cidade escolhida.
 
     Args:
         nome_da_cidade: Nome da Cidade que deseja saber o tempo
-        imperial: Para temperaturas em Fahrenheit = True. Por default está False (Celsius)
 
     Returns:
-        url: Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
-   
-    """
-   
-    # nome_cidade = nome_da_cidade.lower()
-    BASE_WEATHER_API_URL = f'https://api.openweathermap.org/data/2.5/forecast'
-    api_key = config('API_KEY')
-    city_name = nome_da_cidade.lower()
-    url_encoded_city_name = parse.quote_plus(city_name)
-    units = "imperial" if imperial else "metric"
-    url = (
-        f"{BASE_WEATHER_API_URL}?q={url_encoded_city_name}"
-        f"&units={units}&appid={api_key}&lang=pt_br"
-    )
+        requisicao: Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
 
-    requisicao = requests.get(url, verify=False)
+    Examples:
+        >>> previsao_hoje('recife')
+        [{"cod":"200","message":0,"cnt":40,"list":[{"dt":1691614800,"main":{"temp":300.17,"feels_like":301.63,"temp_min":297.63,"temp_max":300.17,}]
+
+    """
+    console.rule('Começando extração de dados')
     
+    nome_cidade = nome_da_cidade.lower()
+    link = f'https://api.openweathermap.org/data/2.5/forecast?q={nome_cidade}&appid={api_secret}&lang=pt_br'
+    requisicao = requests.get(link, verify=False)
     return requisicao
 
 
-def previsao_hoje(nome_da_cidade: str, imperial=False) -> dict[str, list[str]]:
+def previsao_hoje(nome_da_cidade: str) -> dict[str, list[str]]:
     """
     Gera previsão do tempo da cidade escolhida.
 
     Args:
         nome_da_cidade: Nome da Cidade que deseja saber o tempo
-        imperial: Para temperaturas em Fahrenheit = True. Por default está False (Celsius)
 
     Returns:
         Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
@@ -87,7 +71,7 @@ def previsao_hoje(nome_da_cidade: str, imperial=False) -> dict[str, list[str]]:
         [{'pais': 'BR', 'cidade': 'Recife', 'temperatura': 28, 'temperatura_min': 28, 'temperatura_max': 28, 'descricao': 'nuvens dispersas', 'data_requisicao': '230810'}]
 
     """
-    requisicao_hoje = get_data(nome_da_cidade,imperial)
+    requisicao_hoje = get_data(nome_da_cidade)
 
     if requisicao_hoje.status_code == 200:
         requisicao_dic = requisicao_hoje.json()
@@ -97,13 +81,13 @@ def previsao_hoje(nome_da_cidade: str, imperial=False) -> dict[str, list[str]]:
                 'pais': requisicao_dic['city']['country'],
                 'cidade': requisicao_dic['city']['name'],
                 'temperatura': int(
-                    requisicao_dic['list'][0]['main']['temp']
+                    requisicao_dic['list'][0]['main']['temp'] - 273.15
                 ),
                 'temperatura_min': int(
-                    requisicao_dic['list'][0]['main']['temp_min']
+                    requisicao_dic['list'][0]['main']['temp_min'] - 273.15
                 ),
                 'temperatura_max': int(
-                    requisicao_dic['list'][0]['main']['temp_max']
+                    requisicao_dic['list'][0]['main']['temp_max'] - 273.15
                 ),
                 'descricao': requisicao_dic['list'][0]['weather'][0][
                     'description'
@@ -120,28 +104,9 @@ def previsao_hoje(nome_da_cidade: str, imperial=False) -> dict[str, list[str]]:
     return dados_cidade_hoje
 
 
-def previsao_dias(nome_da_cidade: str, imperial=False) -> dict[str, list[str]]:
-    """
-    Gera previsão do tempo de 5 dias da cidade escolhida.
+def previsao_dias(nome_da_cidade):
 
-    Args:
-        nome_da_cidade: Nome da Cidade que deseja saber o tempo
-        imperial: Para temperaturas em Fahrenheit = True. Por default está False (Celsius)
-
-    Returns:
-        Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
-
-    Raises:
-        ValueError: A definir.
-        KeyError: A definir.
-
-    Examples:
-        >>> previsao_hoje('recife')
-        [{'pais': 'BR', 'cidade': 'Recife', 'temperatura': 28, 'temperatura_min': 28, 'temperatura_max': 28, 'descricao': 'nuvens dispersas', 'data_requisicao': '230810'}]
-
-    """
-
-    requisicao_dias = get_data(nome_da_cidade,imperial)
+    requisicao_dias = get_data(nome_da_cidade)
 
     if requisicao_dias.status_code == 200:
         requisicao_dic = requisicao_dias.json()
@@ -152,13 +117,13 @@ def previsao_dias(nome_da_cidade: str, imperial=False) -> dict[str, list[str]]:
                     'pais': requisicao_dic['city']['country'],
                     'cidade': requisicao_dic['city']['name'],
                     'temperatura': int(
-                        requisicao_dic['list'][i]['main']['temp']
+                        requisicao_dic['list'][i]['main']['temp'] - 273.15
                     ),
                     'temperatura_min': int(
-                        requisicao_dic['list'][i]['main']['temp_min']
+                        requisicao_dic['list'][i]['main']['temp_min'] - 273.15
                     ),
                     'temperatura_max': int(
-                        requisicao_dic['list'][i]['main']['temp_max']
+                        requisicao_dic['list'][i]['main']['temp_max'] - 273.15
                     ),
                     'descricao': requisicao_dic['list'][i]['weather'][0][
                         'description'
@@ -186,3 +151,20 @@ def previsao_dias(nome_da_cidade: str, imperial=False) -> dict[str, list[str]]:
 # print('Temperatura ' + str(temperatura) + 'º')
 # print('Temperatura mínima ' + str(temperatura_min) + 'º')
 # print('Temperatura máxima ' + str(temperatura_max) + 'º')
+#    console.rule('Previsão do tempo hoje')
+#    console.rule('Previsão do tempo para 5 dias')
+""" cidade_df = pd.DataFrame(dados_cidade_hoje)
+cidade_df.to_csv(
+    'sharknado/hist/previsao_hoje.csv',
+    mode='a',
+    index=False,
+    header=False,
+)
+
+cidade_df = pd.DataFrame(dados_cidade)
+cidade_df.to_csv(
+    'sharknado/hist/previsao_dias.csv',
+    mode='a',
+    index=False,
+    header=False,
+) """

@@ -37,23 +37,7 @@ def main():
         sys.exit()
         
 
-#    console.rule('Previsão do tempo hoje')
-#    console.rule('Previsão do tempo para 5 dias')
-""" cidade_df = pd.DataFrame(dados_cidade_hoje)
-cidade_df.to_csv(
-    'sharknado/hist/previsao_hoje.csv',
-    mode='a',
-    index=False,
-    header=False,
-)
 
-cidade_df = pd.DataFrame(dados_cidade)
-cidade_df.to_csv(
-    'sharknado/hist/previsao_dias.csv',
-    mode='a',
-    index=False,
-    header=False,
-) """
 
 if __name__ == '__main__':
     startup()
