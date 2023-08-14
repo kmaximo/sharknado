@@ -20,10 +20,11 @@ arquivo gerado -> sharknado/hist/cities_weather_req.csv
 """
 
 from datetime import datetime
-from decouple import config
-from rich.console import Console
+
 import pandas as pd
 import requests
+from decouple import config
+from rich.console import Console
 
 console = Console()
 api_secret = config('API_KEY')
@@ -45,7 +46,7 @@ def get_data(nome_da_cidade: str) -> dict[str, list[str]]:
 
     """
     console.rule('Começando extração de dados')
-    
+
     nome_cidade = nome_da_cidade.lower()
     link = f'https://api.openweathermap.org/data/2.5/forecast?q={nome_cidade}&appid={api_secret}&lang=pt_br'
     requisicao = requests.get(link, verify=False)
@@ -96,7 +97,9 @@ def previsao_hoje(nome_da_cidade: str) -> dict[str, list[str]]:
             }
         ]
     else:
-        print('Algo deu errado.\r\nStatus code: %s' % requisicao_hoje.status_code)
+        print(
+            'Algo deu errado.\r\nStatus code: %s' % requisicao_hoje.status_code
+        )
         print(
             'Você pode saber mais sobre o erro em: https://www.google.com.br/search?q=http+status+code+%s'
             % requisicao_hoje.status_code
@@ -132,12 +135,15 @@ def previsao_dias(nome_da_cidade):
                 }
             ]
     else:
-        print('Algo deu errado.\r\nStatus code: %s' % requisicao_dias.status_code)
+        print(
+            'Algo deu errado.\r\nStatus code: %s' % requisicao_dias.status_code
+        )
         print(
             'Você pode saber mais sobre o erro em: https://www.google.com.br/search?q=http+status+code+%s'
             % requisicao_dias.status_code
         )
     return dados_cidade_dias
+
 
 # descricao = requisicao_dic['weather'][0]['description']
 # temperatura = int(requisicao_dic['main']['temp'] - 273.15)
