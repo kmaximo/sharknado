@@ -15,3 +15,13 @@ Tarefas que precisam ser feitas para conclusão do projeto
 - Feature: Alertas com dados da previsão do tempo
 
 Para tarefas não mapeadas aqui, você pode consultar as [issues do projeto](https://github.com/kmaximo/sharknado_wheater/issues)
+
+
+
+<!-- cidade_df = pd.DataFrame(dados_cidade)
+cidade_df.to_csv(
+    'sharknado/hist/previsao_dias.csv',
+    mode='a',
+    index=False,
+    header=False,
+)  -->
