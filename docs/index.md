@@ -11,23 +11,19 @@ Toda a aplicação é baseada em um comando chamado `sharknado`. Esse comando te
 
 ## Como usar?
 
-### Previsão
+### Previsão de hoje
 
 Você pode saber a previsão do tempo via linha de comando. Por exemplo:
 
 
 ```bash
-{{ commands.run }} escala
+{{ commands.run }} previsao_hoje 'nome da cidade'
 ```
 
-Retornando os graus e as notas correspondentes a essa escala:
+Retornando informações do tempo da cidade escolhida:
 
 ```
-┏━━━┳━━━━┳━━━━━┳━━━━┳━━━┳━━━━┳━━━━━┓
-┃ I ┃ II ┃ III ┃ IV ┃ V ┃ VI ┃ VII ┃
-┡━━━╇━━━━╇━━━━━╇━━━━╇━━━╇━━━━╇━━━━━┩
-│ C │ D  │ E   │ F  │ G │ A  │ B   │
-└───┴────┴─────┴────┴───┴────┴─────┘
+BR Recife  Nuvens dispersas   Temperatura (28°C)
 ```
 
 ## Grafico
@@ -46,19 +42,6 @@ Uso básico
 Até o momento você usar acordes maiores, menores, dimunito e aumentados
 
 
-## Alertas
-
-Você pode chamar os campos harmônicos via o subcomando `campo-harmonico`. Por exemplo:
-
-```bash
-{{ commands.run }} campo-harmonico
-
-┏━━━┳━━━━┳━━━━━┳━━━━┳━━━┳━━━━┳━━━━━━┓
-┃ I ┃ ii ┃ iii ┃ IV ┃ V ┃ vi ┃ vii° ┃
-┡━━━╇━━━━╇━━━━━╇━━━━╇━━━╇━━━━╇━━━━━━┩
-│ C │ Dm │ Em  │ F  │ G │ Am │ B°   │
-└───┴────┴─────┴────┴───┴────┴──────┘
-```
 ## Mais informações sobre o CLI
 
 Para descobrir outras opções, você pode usar a flag `--help`:

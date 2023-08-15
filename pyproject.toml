@@ -5,6 +5,10 @@ description = ""
 authors = ["K Maximo"]
 readme = "README.md"
 
+[tool.poetry.scripts] 
+sharknado = "sharknado.cli:app"
+
+
 [tool.poetry.dependencies]
 python = "^3.11"
 rich = "^13.5.2"

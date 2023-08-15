@@ -37,7 +37,11 @@ def consulta_previsao_hoje(
     ),
     u: bool = Option(
         False,
-        help='Para temperaturas em Fahrenheit e ventos miles/hour. Por default Temperatura Celsius e metros/sec )',
+        help='Para temperaturas em Fahrenheit e ventos miles/hour. Por default Temperatura Celsius e metros/sec',
+    ),
+    g: bool = Option(
+        False,
+        help='Para gráficos com as informações do tempo',
     ),
 ):
 
@@ -62,8 +66,12 @@ def consulta_previsao_hoje(
     cor = base_style['RESET']
 
     console.print(f"Temperatura ({temperatura}°{'F' if u else 'C'})", end=' ')
-    # console.print(f"Temp min ({temperatura_min}°{'F' if u else 'C'})", end=' ')
-    # console.print(f"Temp max ({temperatura_max}°{'F' if u else 'C'})", end=' ')
+    console.print(f"Temp min ({temperatura_min}°{'F' if u else 'C'})", end=' ')
+    console.print(f"Temp max ({temperatura_max}°{'F' if u else 'C'})", end=' ')
+    console.print(f"Sensação Térmica ({sensacao_termica}°{'F' if u else 'C'})", end=' ')
+    console.print(f"Vento ({vento} {'m/h' if u else 'm/s'})", end=' ')
+
+
 
 
 def select_cor_display(tempo_id):
@@ -85,6 +93,3 @@ def select_cor_display(tempo_id):
         estilo = base_style['RESET']
     return estilo
 
-
-# if __name__ == '__main__':
-#     run(consulta_previsao_hoje)
