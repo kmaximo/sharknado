@@ -2,7 +2,10 @@ from rich.console import Console
 from rich.style import Style
 from typer import Argument, Context, Exit, Option, Typer, run
 
-from sharknado.previsao import previsao_hoje
+from sharknado.previsao import *
+
+import pandas as pd
+import matplotlib.pyplot as plt
 
 console = Console()
 
@@ -33,44 +36,70 @@ base_style = {
 @app.command()
 def consulta_previsao_hoje(
     nome_da_cidade=Argument(
-        ..., help='Nome da Cidade que deseja saber o tempo'
+        ..., help="Informar entre aspas, o 'Nome da Cidade' que deseja saber o tempo"
     ),
     u: bool = Option(
         False,
+        '-u',
+        '--u',
         help='Para temperaturas em Fahrenheit e ventos miles/hour. Por default Temperatura Celsius e metros/sec',
     ),
     g: bool = Option(
         False,
+        '-g',
+        '--g',
         help='Para gráficos com as informações do tempo',
     ),
 ):
 
-    dados = previsao_hoje(nome_da_cidade, u)
+    if g:
 
-    pais = dados['pais']
-    cidade = dados['cidade']
-    temperatura = dados['temperatura']
-    temperatura_min = dados['temperatura_min']
-    temperatura_max = dados['temperatura_max']
-    sensacao_termica = dados['temperatura_max']
-    vento = dados['temperatura_max']
-    tempo_id = dados['tempo_id']
-    descricao_tempo = dados['descricao']
-    data_temperatura = dados['data']
+        dados = previsao_dias(nome_da_cidade, u,g)
+        cidade = dados[0]['cidade']
+        datas = []
+        df = pd.DataFrame(dados)
+        
+        for x in df['data']:
+            dt = x.split(' ')
+            dt = dt[0]
+            datas.append(dt)
+        df['dt'] = datas
+        
 
-    console.print(f'[white reverse]{pais}[/]', end=' ')
-    console.print(f'[white reverse]{cidade}[/]', end='')
+        df.plot.bar(x='dt', y=['temperatura','temperatura_min','temperatura_max'], 
+                    rot=0, figsize=(16,9), title=f'Previsão de temperaturas da cidade de {cidade}',
+                    xlabel='Dias',ylabel=f"Temperatura em °{'F' if u else 'C'}")
+        
+        plt.show()
 
-    cor = select_cor_display(tempo_id)
-    console.print(f'{descricao_tempo.capitalize():^20}', end=' ', style=cor)
-    cor = base_style['RESET']
+        # print(df['dt'].unique)
 
-    console.print(f"Temperatura ({temperatura}°{'F' if u else 'C'})", end=' ')
-    console.print(f"Temp min ({temperatura_min}°{'F' if u else 'C'})", end=' ')
-    console.print(f"Temp max ({temperatura_max}°{'F' if u else 'C'})", end=' ')
-    console.print(f"Sensação Térmica ({sensacao_termica}°{'F' if u else 'C'})", end=' ')
-    console.print(f"Vento ({vento} {'m/h' if u else 'm/s'})", end=' ')
+    else:
+        dados = previsao_hoje(nome_da_cidade, u, g)
 
+        pais = dados[0]['pais']
+        cidade = dados[0]['cidade']
+        temperatura = dados[0]['temperatura']
+        temperatura_min = dados[0]['temperatura_min']
+        temperatura_max = dados[0]['temperatura_max']
+        sensacao_termica = dados[0]['temperatura_max']
+        vento = dados[0]['temperatura_max']
+        tempo_id = dados[0]['tempo_id']
+        descricao_tempo = dados[0]['descricao']
+        data_temperatura = dados[0]['data']
+
+        console.print(f'[white reverse]{pais}[/]', end=' ')
+        console.print(f'[white reverse]{cidade}[/]', end='')
+
+        cor = select_cor_display(tempo_id)
+        console.print(f'{descricao_tempo.capitalize():^20}', end=' ', style=cor)
+        cor = base_style['RESET']
+
+        console.print(f"Temperatura ({temperatura}°{'F' if u else 'C'})", end=' ')
+        console.print(f"Temp min ({temperatura_min}°{'F' if u else 'C'})", end=' ')
+        console.print(f"Temp max ({temperatura_max}°{'F' if u else 'C'})", end=' ')
+        console.print(f"Sensação Térmica ({sensacao_termica}°{'F' if u else 'C'})", end=' ')
+        console.print(f"Vento ({vento} {'m/h' if u else 'm/s'})", end=' ')        
 
 
 
@@ -89,7 +118,7 @@ def select_cor_display(tempo_id):
         estilo = base_style['CLEAR']
     elif tempo_id in CLOUDY:
         estilo = base_style['CLOUDY']
-    else:  # In case the API adds new weather codes
+    else:  # no caso de surgir novos codígos
         estilo = base_style['RESET']
     return estilo
 
