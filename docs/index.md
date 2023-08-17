@@ -1,46 +1,63 @@
 
-# Sharknado Previsao do Tempo
+# Sharknado
 
-Sharknado Previsao do Tempo é uma API para buscar informações sobre tempo em uma determinada cidade.
+Sharknado é um CLI de previsao do tempo busca informações sobre tempo em uma determinada cidade através da API [OpenWeather](https://openweathermap.org/api) .
 
-Toda a aplicação é baseada em um comando chamado `sharknado`. Esse comando tem um subcomando relacionado a cada ação que a aplicação pode realizar. Como `previsao`, `grafico` e `alertas`
-{% include "templates/cards.html" %}
-
-
-{% include "templates/instalacao.md" %}
+Toda a aplicação é baseada em um comando chamado `sharknado`.
 
 ## Como usar?
 
-### Previsão de hoje
+### Previsão do tempo neste momento
 
-Você pode saber a previsão do tempo via linha de comando. Por exemplo:
-
+Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
 
 ```bash
-{{ commands.run }} previsao_hoje 'nome da cidade'
+{{ commands.run }} 'nome da cidade'
 ```
 
 Retornando informações do tempo da cidade escolhida:
 
-```
-BR Recife  Nuvens dispersas   Temperatura (28°C)
+```bash
+NG Sokoto   Algumas nuvens    Temperatura (37°C) Temp min (37°C) Temp max (37°C) Sensação Térmica (37°C) Vento (37 m/s)
 ```
 
-## Grafico
+### Previsão do tempo agora em outra unidade de medida: Fahrenheit e miles/h
 
-Uso básico
+Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
 
 ```bash
-{{ commands.run }} acorde
-┏━━━┳━━━━━┳━━━┓
-┃ I ┃ III ┃ V ┃
-┡━━━╇━━━━━╇━━━┩
-│ C │ E   │ G │
-└───┴─────┴───┘
+{{ commands.run }} 'nome da cidade' -u
 ```
 
-Até o momento você usar acordes maiores, menores, dimunito e aumentados
+Retornando informações do tempo da cidade escolhida:
 
+```bash
+NG Sokoto  Nuvens dispersas   Temperatura (98°F) Temp min (98°F) Temp max (98°F) Sensação Térmica (98°F) Vento (98 m/h) 
+```
+
+## Gráfico
+
+## Como usar gráfico?
+
+### Previsão do tempo neste momento com gráfico
+
+Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
+
+```bash
+{{ commands.run }} 'nome da cidade' -g
+```
+
+Retornando informações em uma janela do tempo da cidade escolhida
+
+### Previsão do tempo agora em outra unidade de medida: Fahrenheit e miles/h com gráfico
+
+Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
+
+```bash
+{{ commands.run }} 'nome da cidade' -u -g
+```
+
+Retornando informações em uma janela do tempo da cidade escolhida
 
 ## Mais informações sobre o CLI
 
@@ -49,31 +66,20 @@ Para descobrir outras opções, você pode usar a flag `--help`:
 ```bash
 {{ commands.run }} --help
                                                                        
- Usage: notas-musicais [OPTIONS] COMMAND [ARGS]...
+ Usage: sharknado [OPTIONS] 'NOME_DA_CIDADE'
 
-╭─ Commands ──────────────────────────────────────────────────────────╮
-│ acorde                                                              │
-│ campo-harmonico                                                     │
-│ escala                                                              │
-╰─────────────────────────────────────────────────────────────────────╯
-```
-
-### Mais informações sobre os subcomandos
-
-As informações sobre os subcomandos podem ser acessadas usando a flag `--help` após o nome do parâmetro. Um exemplo do uso do `help` nos campos harmônicos:
-
-```bash
-{{ commands.run }} campo-harmonico --help
-                                                                       
- Usage: notas-musicais campo-harmonico [OPTIONS] [TONICA] [TONALIDADE] 
-                                                                       
-╭─ Arguments ─────────────────────────────────────────────────────────╮
-│   tonica          [TONICA]      Tônica do campo harmônico           │
-│                                 [default: c]                        │
-│   tonalidade      [TONALIDADE]  Tonalidade do campo harmônico       │
-│                                 [default: maior]                    │
-╰─────────────────────────────────────────────────────────────────────╯
-╭─ Options ───────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                         │
-╰─────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    nome_da_cidade      TEXT  Informar entre aspas, o 'Nome da Cidade' que deseja saber o tempo [default: None]           │
+│                                [required]                                                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --u                   -u                                       Para temperaturas em Fahrenheit e ventos miles/hour. Por    │
+│                                                                default Temperatura Celsius e metros/sec                    │
+│ --g                   -g                                       Para gráficos com as informações do tempo                   │
+│ --install-completion          [bash|zsh|fish|powershell|pwsh]  Install completion for the specified shell. [default: None] │
+│ --show-completion             [bash|zsh|fish|powershell|pwsh]  Show completion for the specified shell, to copy it or      │
+│                                                                customize the installation.                                 │
+│                                                                [default: None]                                             │
+│ --help                                                         Show this message and exit.                                 │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

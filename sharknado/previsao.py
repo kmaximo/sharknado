@@ -12,11 +12,11 @@ Os dados da previsão do tempo são obtidas através da api do [open_weather](ht
 Após a requisição é gerado um arquivo .csv para armazenar historio e para gerar os gráficos
 """
 from configparser import ConfigParser
+from datetime import datetime
 from urllib import parse
 
 import pandas as pd
 import requests
-from datetime import datetime
 from decouple import config
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -27,13 +27,16 @@ requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 api_secret = config('API_KEY')
 
 
-def get_data(nome_da_cidade: str, imperial: bool=False, forecast: bool=False) -> dict[str, list[str]]:
+def get_data(
+    nome_da_cidade: str, imperial: bool = False, forecast: bool = False
+) -> dict[str, list[str]]:
     """
     Realiza requisição para obter informações da previsão do tempo da cidade escolhida.
 
     Args:
         nome_da_cidade: Nome da Cidade que deseja saber o tempo
         imperial: Para temperaturas em Fahrenheit e ventos miles/hour. Por default Temperatura Celsius e metros/sec
+        forecast: Para pegas os informações de temperaturas de 5 dias a partir do dia da requisição
 
     Returns:
         requisicao: Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
@@ -56,13 +59,16 @@ def get_data(nome_da_cidade: str, imperial: bool=False, forecast: bool=False) ->
     return requisicao
 
 
-def previsao_hoje(nome_da_cidade: str, imperial: bool=False, forecast: bool=False) -> dict[str, list[str]]:
+def previsao_hoje(
+    nome_da_cidade: str, imperial: bool = False, forecast: bool = False
+) -> dict[str, list[str]]:
     """
     Gera previsão do tempo da cidade escolhida.
 
     Args:
         nome_da_cidade: Nome da Cidade que deseja saber o tempo
         imperial: Para temperaturas em Fahrenheit e ventos miles/hour. Por default Temperatura Celsius e metros/sec
+        forecast: Para pegas os informações de temperaturas de 5 dias a partir do dia da requisição
 
     Returns:
         Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
@@ -77,32 +83,24 @@ def previsao_hoje(nome_da_cidade: str, imperial: bool=False, forecast: bool=Fals
 
     """
     requisicao_hoje = get_data(nome_da_cidade, imperial, forecast)
-    
 
     if requisicao_hoje.status_code == 200:
         requisicao_dic = requisicao_hoje.json()
 
-        dados_cidade_hoje = [{
+        dados_cidade_hoje = [
+            {
                 'pais': requisicao_dic['sys']['country'],
                 'cidade': requisicao_dic['name'],
                 'lat': requisicao_dic['coord']['lat'],
                 'lon': requisicao_dic['coord']['lon'],
                 'temperatura': int(requisicao_dic['main']['temp']),
-                'temperatura_min': int(
-                    requisicao_dic['main']['temp_min']
-                ),
-                'temperatura_max': int(
-                    requisicao_dic['main']['temp_max']
-                ),
-                'sensacao_termica': int(
-                    requisicao_dic['main']['feels_like']
-                ),
+                'temperatura_min': int(requisicao_dic['main']['temp_min']),
+                'temperatura_max': int(requisicao_dic['main']['temp_max']),
+                'sensacao_termica': int(requisicao_dic['main']['feels_like']),
                 'vento': requisicao_dic['wind']['speed'],
                 'tempo_id': requisicao_dic['weather'][0]['id'],
-                'descricao': requisicao_dic['weather'][0][
-                    'description'
-                ],
-                'data': datetime.now().strftime("%y%m%d") ,
+                'descricao': requisicao_dic['weather'][0]['description'],
+                'data': datetime.now().strftime('%y%m%d'),
             }
         ]
     else:
@@ -115,13 +113,17 @@ def previsao_hoje(nome_da_cidade: str, imperial: bool=False, forecast: bool=Fals
         )
     return dados_cidade_hoje
 
-def previsao_dias(nome_da_cidade: str, imperial: bool=False, forecast: bool=True) -> dict[str, list[str]]:
+
+def previsao_dias(
+    nome_da_cidade: str, imperial: bool = False, forecast: bool = True
+) -> dict[str, list[str]]:
     """
     Gera previsão do tempo da cidade escolhida.
 
     Args:
         nome_da_cidade: Nome da Cidade que deseja saber o tempo
         imperial: Para temperaturas em Fahrenheit e ventos miles/hour. Por default Temperatura Celsius e metros/sec
+        forecast: Para pegas os informações de temperaturas de 5 dias a partir do dia da requisição
 
     Returns:
         Um dicionário com dados da previsão do tempo de hoje da cidade escolhida.
@@ -136,35 +138,35 @@ def previsao_dias(nome_da_cidade: str, imperial: bool=False, forecast: bool=True
 
     """
     requisicao_hoje = get_data(nome_da_cidade, imperial, forecast)
-    
+
     lista_hoje_3h = []
 
     if requisicao_hoje.status_code == 200:
         requisicao_dic = requisicao_hoje.json()
 
-        for i in range(0,40):
+        for i in range(0, 40):
             dados_cidade_hoje = {
-                    'pais': requisicao_dic['city']['country'],
-                    'cidade': requisicao_dic['city']['name'],
-                    'lat': requisicao_dic['city']['coord']['lat'],
-                    'lon': requisicao_dic['city']['coord']['lon'],
-                    'temperatura': int(requisicao_dic['list'][i]['main']['temp']),
-                    'temperatura_min': int(
-                        requisicao_dic['list'][i]['main']['temp_min']
-                    ),
-                    'temperatura_max': int(
-                        requisicao_dic['list'][i]['main']['temp_max']
-                    ),
-                    'sensacao_termica': int(
-                        requisicao_dic['list'][i]['main']['feels_like']
-                    ),
-                    'vento': requisicao_dic['list'][i]['wind']['speed'],
-                    'tempo_id': requisicao_dic['list'][i]['weather'][0]['id'],
-                    'descricao': requisicao_dic['list'][i]['weather'][0][
-                        'description'
-                    ],
-                    'data': requisicao_dic['list'][i]['dt_txt'],
-                }
+                'pais': requisicao_dic['city']['country'],
+                'cidade': requisicao_dic['city']['name'],
+                'lat': requisicao_dic['city']['coord']['lat'],
+                'lon': requisicao_dic['city']['coord']['lon'],
+                'temperatura': int(requisicao_dic['list'][i]['main']['temp']),
+                'temperatura_min': int(
+                    requisicao_dic['list'][i]['main']['temp_min']
+                ),
+                'temperatura_max': int(
+                    requisicao_dic['list'][i]['main']['temp_max']
+                ),
+                'sensacao_termica': int(
+                    requisicao_dic['list'][i]['main']['feels_like']
+                ),
+                'vento': requisicao_dic['list'][i]['wind']['speed'],
+                'tempo_id': requisicao_dic['list'][i]['weather'][0]['id'],
+                'descricao': requisicao_dic['list'][i]['weather'][0][
+                    'description'
+                ],
+                'data': requisicao_dic['list'][i]['dt_txt'],
+            }
             lista_hoje_3h.append(dados_cidade_hoje)
     else:
         print(
@@ -175,4 +177,3 @@ def previsao_dias(nome_da_cidade: str, imperial: bool=False, forecast: bool=True
             % requisicao_hoje.status_code
         )
     return lista_hoje_3h
-

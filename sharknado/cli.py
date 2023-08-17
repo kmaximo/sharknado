@@ -1,11 +1,10 @@
+import matplotlib.pyplot as plt
+import pandas as pd
 from rich.console import Console
 from rich.style import Style
 from typer import Argument, Context, Exit, Option, Typer, run
 
 from sharknado.previsao import *
-
-import pandas as pd
-import matplotlib.pyplot as plt
 
 console = Console()
 
@@ -36,7 +35,8 @@ base_style = {
 @app.command()
 def consulta_previsao_hoje(
     nome_da_cidade=Argument(
-        ..., help="Informar entre aspas, o 'Nome da Cidade' que deseja saber o tempo"
+        ...,
+        help="Informar entre aspas, o 'Nome da Cidade' que deseja saber o tempo",
     ),
     u: bool = Option(
         False,
@@ -54,22 +54,27 @@ def consulta_previsao_hoje(
 
     if g:
 
-        dados = previsao_dias(nome_da_cidade, u,g)
+        dados = previsao_dias(nome_da_cidade, u, g)
         cidade = dados[0]['cidade']
         datas = []
         df = pd.DataFrame(dados)
-        
+
         for x in df['data']:
             dt = x.split(' ')
             dt = dt[0]
             datas.append(dt)
         df['dt'] = datas
-        
 
-        df.plot.bar(x='dt', y=['temperatura','temperatura_min','temperatura_max'], 
-                    rot=0, figsize=(16,9), title=f'Previsão de temperaturas da cidade de {cidade}',
-                    xlabel='Dias',ylabel=f"Temperatura em °{'F' if u else 'C'}")
-        
+        df.plot.bar(
+            x='dt',
+            y=['temperatura', 'temperatura_min', 'temperatura_max'],
+            rot=0,
+            figsize=(16, 9),
+            title=f'Previsão de 5 dias de temperaturas da cidade de {cidade}',
+            xlabel='Dias',
+            ylabel=f"Temperatura em °{'F' if u else 'C'}",
+        )
+
         plt.show()
 
         # print(df['dt'].unique)
@@ -92,15 +97,25 @@ def consulta_previsao_hoje(
         console.print(f'[white reverse]{cidade}[/]', end='')
 
         cor = select_cor_display(tempo_id)
-        console.print(f'{descricao_tempo.capitalize():^20}', end=' ', style=cor)
+        console.print(
+            f'{descricao_tempo.capitalize():^20}', end=' ', style=cor
+        )
         cor = base_style['RESET']
 
-        console.print(f"Temperatura ({temperatura}°{'F' if u else 'C'})", end=' ')
-        console.print(f"Temp min ({temperatura_min}°{'F' if u else 'C'})", end=' ')
-        console.print(f"Temp max ({temperatura_max}°{'F' if u else 'C'})", end=' ')
-        console.print(f"Sensação Térmica ({sensacao_termica}°{'F' if u else 'C'})", end=' ')
-        console.print(f"Vento ({vento} {'m/h' if u else 'm/s'})", end=' ')        
-
+        console.print(
+            f"Temperatura ({temperatura}°{'F' if u else 'C'})", end=' '
+        )
+        console.print(
+            f"Temp min ({temperatura_min}°{'F' if u else 'C'})", end=' '
+        )
+        console.print(
+            f"Temp max ({temperatura_max}°{'F' if u else 'C'})", end=' '
+        )
+        console.print(
+            f"Sensação Térmica ({sensacao_termica}°{'F' if u else 'C'})",
+            end=' ',
+        )
+        console.print(f"Vento ({vento} {'m/h' if u else 'm/s'})", end=' ')
 
 
 def select_cor_display(tempo_id):
@@ -122,3 +137,11 @@ def select_cor_display(tempo_id):
         estilo = base_style['RESET']
     return estilo
 
+
+# cidade_df = pd.DataFrame(dados_cidade)
+# cidade_df.to_csv(
+#     'sharknado/hist/previsao_dias.csv',
+#     mode='a',
+#     index=False,
+#     header=False,
+# )

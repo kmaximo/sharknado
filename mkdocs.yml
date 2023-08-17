@@ -5,13 +5,33 @@ repo_url: https://github.com/kmaximo/sharknado_wheater
 repo_name: kmaximo/sharknado_wheater
 edit_uri: tree/main/docs
 
-
 theme:
   name: material
   language: pt-BR
 
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.tasklist
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+      
+watch:
+   - sharknado
+
 plugins:
+- macros
 - mkdocstrings:
     handlers:
       python:
         paths: [sharknado]
+
+extra:
+  commands:
+    run: poetry run sharknado
