@@ -5,9 +5,9 @@ from rich.style import Style
 from typer import Argument, Context, Exit, Option, Typer, run
 
 from sharknado.previsao import *
+from sharknado import __version__
 
 console = Console()
-
 app = Typer()
 
 # Codigo das condições do tempo
@@ -30,6 +30,11 @@ base_style = {
     'CLOUDY': Style.parse('dim'),
     'RESET': Style.parse('white'),
 }
+
+def version_func(flag):
+    if flag:
+        print(__version__)
+        raise Exit(code=0)
 
 def main():
     ...

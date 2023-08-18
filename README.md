@@ -7,12 +7,14 @@ Toda a aplicação é baseada em um comando chamado `poetry run sharknado`.
 
 ## Como usar?
 
+Ao realizar o git clone, criar arquivo chamado .env contendo as seguintes informações: `API_KEY = 'SUA CHAVE DO OPENWEATHER AQUI'`
+
 ### Previsão do tempo neste momento
 
 Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
 
 ```bash
-poetry run skarknado 'nome da cidade'
+poetry run sharknado 'nome da cidade'
 ```
 
 Retornando informações do tempo da cidade escolhida:
@@ -26,7 +28,7 @@ NG Sokoto   Algumas nuvens    Temperatura (37°C) Temp min (37°C) Temp max (37�
 Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
 
 ```bash
-poetry run skarknado 'nome da cidade' -u
+poetry run sharknado 'nome da cidade' -u
 ```
 
 Retornando informações do tempo da cidade escolhida:
@@ -44,7 +46,7 @@ NG Sokoto  Nuvens dispersas   Temperatura (98°F) Temp min (98°F) Temp max (98�
 Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
 
 ```bash
-poetry run skarknado 'nome da cidade' -g
+poetry run sharknado 'nome da cidade' -g
 ```
 
 Retornando informações em uma janela do tempo da cidade escolhida
@@ -54,7 +56,7 @@ Retornando informações em uma janela do tempo da cidade escolhida
 Você pode saber a previsão do tempo atual via linha de comando. Por exemplo:
 
 ```bash
-poetry run skarknado 'nome da cidade' -u -g
+poetry run sharknado 'nome da cidade' -u -g
 ```
 
 Retornando informações em uma janela do tempo da cidade escolhida
@@ -64,7 +66,7 @@ Retornando informações em uma janela do tempo da cidade escolhida
 Para descobrir outras opções, você pode usar a flag `--help`:
 
 ```bash
-poetry run skarknado --help
+poetry run sharknado --help
                                                                        
  Usage: sharknado [OPTIONS] 'NOME_DA_CIDADE'
 
