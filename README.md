@@ -7,7 +7,7 @@ Toda a aplicação é baseada em um comando chamado `poetry run sharknado`.
 
 ## Como usar?
 
-Ao realizar o git clone, criar arquivo chamado .env contendo as seguintes informações: `API_KEY = 'SUA CHAVE DO OPENWEATHER AQUI'`
+Ao realizar o git clone, criar arquivo chamado .env, dentro da pasta *sharknado*, contendo as seguintes informações: `API_KEY = 'SUA CHAVE DO OPENWEATHER AQUI'`
 
 ### Previsão do tempo neste momento
 
