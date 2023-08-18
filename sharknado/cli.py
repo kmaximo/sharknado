@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.express as px
 from rich.console import Console
 from rich.style import Style
 from typer import Argument, Context, Exit, Option, Typer, run
@@ -59,25 +60,34 @@ def consulta_previsao_hoje(
         datas = []
         df = pd.DataFrame(dados)
 
-        for x in df['data']:
-            dt = x.split(' ')
-            dt = dt[0]
-            datas.append(dt)
-        df['dt'] = datas
+        # for x in df['data']:
+        #     dt = x.split(' ')
+        #     dt = dt[0]
+        #     datas.append(dt)
+        # df['dt'] = datas
 
-        df.plot.bar(
-            x='dt',
-            y=['temperatura', 'temperatura_min', 'temperatura_max'],
-            rot=0,
-            figsize=(16, 9),
-            title=f'Previsão de 5 dias de temperaturas da cidade de {cidade}',
-            xlabel='Dias',
-            ylabel=f"Temperatura em °{'F' if u else 'C'}",
+        # df.plot.bar(
+        #     x='dt',
+        #     y=['temperatura', 'temperatura_min', 'temperatura_max'],
+        #     rot=0,
+        #     figsize=(16, 9),
+        #     title=f'Previsão de 5 dias de temperaturas da cidade de {cidade}',
+        #     xlabel='Dias',
+        #     ylabel=f"Temperatura em °{'F' if u else 'C'}",
+        # )
+
+        fig = px.bar(df, x='data', y='temperatura',
+                     title=f'Previsão de 5 dias de temperaturas da cidade de {cidade}',
+                     labels={ # replaces default labels by column name
+                        "data": "Dias", "temperatura": f"Temperatura em °{'F' if u else 'C'}"
+                    },
+
         )
+        fig.show()        
 
-        plt.show()
+        # plt.show()
 
-        # print(df['dt'].unique)
+        # print(df)
 
     else:
         dados = previsao_hoje(nome_da_cidade, u, g)
