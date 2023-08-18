@@ -12,9 +12,9 @@ Tarefas previstas
   - Feature: Resposta
     - [x] Enviar a resposta final ao usuário, contendo informações sobre a previsão do tempo, gráfico (se for solicitado) e alertas, caso haja algum
 - Pontos de melhorias
-  - Feature: Gráfico com dados da previsão do tempo
+  - Gráfico com dados da previsão do tempo
     - [ ] Usar o rich.table [Rich](https://rich.readthedocs.io/en/latest/appendix/box.html)
-  - Feature: Alertas com dados da previsão do tempo
+  - Alertas com dados da previsão do tempo
     - [ ] Criar novos alertas com o [Rich](https://rich.readthedocs.io/)
 
 Para tarefas não mapeadas aqui, você pode consultar as [issues do projeto](https://github.com/kmaximo/sharknado_wheater/issues)

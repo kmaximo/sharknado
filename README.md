@@ -3,7 +3,7 @@
 
 Sharknado é um CLI de previsao do tempo busca informações sobre tempo em uma determinada cidade através da API [OpenWeather](https://openweathermap.org/api) .
 
-Toda a aplicação é baseada em um comando chamado `sharknado`.
+Toda a aplicação é baseada em um comando chamado `poetry run sharknado`.
 
 ## Como usar?
 

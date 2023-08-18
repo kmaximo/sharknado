@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
 from rich.console import Console
@@ -32,6 +31,8 @@ base_style = {
     'RESET': Style.parse('white'),
 }
 
+def main():
+    ...
 
 @app.command()
 def consulta_previsao_hoje(
