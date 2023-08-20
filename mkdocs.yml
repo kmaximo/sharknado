@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 
 site_name: Sharknado Weather
-repo_url: https://github.com/kmaximo/sharknado_wheater
-repo_name: kmaximo/sharknado_wheater
+repo_url: https://github.com/kmaximo/sharknado_weather
+repo_name: sharknado_weather
 edit_uri: tree/main/docs
 
 theme:
@@ -21,7 +21,10 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-      
+
+extra_css:
+  - stylesheets/extra.css
+
 watch:
    - sharknado
 

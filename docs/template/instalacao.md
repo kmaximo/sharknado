@@ -4,6 +4,8 @@ Para instalação do cli do projeto recomendamos que use o `git clone` para faze
 
 ```bash
 git clone https://github.com/kmaximo/sharknado_weather.git
+poetry shell
+poetry install
 ```
 
 Embora isso seja somente uma recomendação! Você também pode instalar o projeto com o gerenciador de sua preferência. Como o pip:
