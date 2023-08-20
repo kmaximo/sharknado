@@ -5,6 +5,22 @@ Sharknado é um CLI de previsao do tempo busca informações sobre tempo em uma 
 
 Toda a aplicação é baseada em um comando chamado `poetry run sharknado`.
 
+## Como instalar o projeto
+
+Para instalação do cli do projeto recomendamos que use o `git clone` para fazer essa instalação:
+
+```bash
+git clone https://github.com/kmaximo/sharknado_weather.git
+poetry shell
+poetry install
+```
+
+Embora isso seja somente uma recomendação! Você também pode instalar o projeto com o gerenciador de sua preferência. Como o pip:
+
+```bash
+pip install sharknado
+```
+
 ## Como usar?
 
 Ao realizar o git clone, criar arquivo chamado .env, dentro da pasta *sharknado*, contendo as seguintes informações: `API_KEY = 'SUA CHAVE DO OPENWEATHER AQUI'`
