@@ -1,14 +1,15 @@
+import time
+
 import pandas as pd
 import plotly.express as px
-import time
 from rich.console import Console
 from rich.progress import Progress, track
-from rich.table import Table
 from rich.style import Style
+from rich.table import Table
 from typer import Argument, Context, Exit, Option, Typer, run
 
-from sharknado.previsao import *
 from sharknado import __version__
+from sharknado.previsao import *
 
 console = Console()
 table = Table()
@@ -35,17 +36,19 @@ base_style = {
     'RESET': Style.parse('white'),
 }
 
+
 def version_func(flag):
     if flag:
         print(__version__)
         raise Exit(code=0)
-    
+
+
 @app.callback(invoke_without_command=True)
 def main(
     ctx: Context,
     version: bool = Option(False, callback=version_func, is_flag=True),
-    ):
-        message = """Forma de uso: [b]sharknado [SUBCOMANDO] [ARGUMENTOS][/]
+):
+    message = """Forma de uso: [b]sharknado [SUBCOMANDO] [ARGUMENTOS][/]
 
     Existe 1 subcomando disponível para essa aplicação
 
@@ -62,9 +65,10 @@ def main(
 
     [b]Para informações detalhadas: [blue][link=http://sharknado_weather.readthedocs.io]acesse a documentação![/]
     """
-        if ctx.invoked_subcommand:
-            return
-        console.print(message)
+    if ctx.invoked_subcommand:
+        return
+    console.print(message)
+
 
 @app.command()
 def previsao(
@@ -110,20 +114,22 @@ def previsao(
         # )
         # plt.show()
 
-        fig = px.bar(df, x='data', y='temperatura',
-                     title=f'Previsão de 5 dias de temperaturas da cidade de {cidade}',
-                     labels={ # replaces default labels by column name
-                        "data": "Dias", "temperatura": f"Temperatura em °{'F' if u else 'C'}"
-                    },
-
+        fig = px.bar(
+            df,
+            x='data',
+            y='temperatura',
+            title=f'Previsão de 5 dias de temperaturas da cidade de {cidade}',
+            labels={  # replaces default labels by column name
+                'data': 'Dias',
+                'temperatura': f"Temperatura em °{'F' if u else 'C'}",
+            },
         )
-        fig.show()        
+        fig.show()
 
         # print(df)
 
-
     else:
-        for i in track(range(20), description="Processando..."):
+        for i in track(range(20), description='Processando...'):
             time.sleep(0.5)  # Simulate work being done
         dados = previsao_hoje(nome_da_cidade, u, g)
 

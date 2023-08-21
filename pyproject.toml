@@ -1,9 +1,22 @@
 [tool.poetry]
 name = "sharknado"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["K Maximo", "Ravi S."]
 readme = "README.md"
+classifiers = [
+    "Topic :: Education",
+    "Environment :: Console",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.11",
+]
+
+[tool.poetry.urls]
+"Documentação" = "https://sharknado_weather.readthedocs.io/en/latest/"
+"Código" = "https://github.com/kmaximo/sharknado_weather"
+"Bug Tracker" = "https://github.com/kmaximo/sharknado_weather/issues"
+
 
 [tool.poetry.scripts] 
 sharknado = "sharknado.cli:app"
