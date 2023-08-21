@@ -1,6 +1,9 @@
 import pandas as pd
 import plotly.express as px
+import time
 from rich.console import Console
+from rich.progress import Progress, track
+from rich.table import Table
 from rich.style import Style
 from typer import Argument, Context, Exit, Option, Typer, run
 
@@ -8,6 +11,7 @@ from sharknado.previsao import *
 from sharknado import __version__
 
 console = Console()
+table = Table()
 app = Typer()
 
 # Codigo das condições do tempo
@@ -35,12 +39,35 @@ def version_func(flag):
     if flag:
         print(__version__)
         raise Exit(code=0)
+    
+@app.callback(invoke_without_command=True)
+def main(
+    ctx: Context,
+    version: bool = Option(False, callback=version_func, is_flag=True),
+    ):
+        message = """Forma de uso: [b]sharknado [SUBCOMANDO] [ARGUMENTOS][/]
 
-def main():
-    ...
+    Existe 1 subcomando disponível para essa aplicação
+
+    - [b]previsao[/]: Gera previsão do tempo da cidade escolhida.
+
+    [b]Exemplos de uso:[/]
+    sharknado previsao 'recife'
+
+    sharknado previsao 'sao paulo' -u
+
+    sharknado previsao 'Londres' -u -g
+
+    [b]Para mais informações rápidas: [red]sharknado --help[/]
+
+    [b]Para informações detalhadas: [blue][link=http://sharknado_weather.readthedocs.io]acesse a documentação![/]
+    """
+        if ctx.invoked_subcommand:
+            return
+        console.print(message)
 
 @app.command()
-def consulta_previsao_hoje(
+def previsao(
     nome_da_cidade=Argument(
         ...,
         help="Informar entre aspas, o 'Nome da Cidade' que deseja saber o tempo",
@@ -81,6 +108,7 @@ def consulta_previsao_hoje(
         #     xlabel='Dias',
         #     ylabel=f"Temperatura em °{'F' if u else 'C'}",
         # )
+        # plt.show()
 
         fig = px.bar(df, x='data', y='temperatura',
                      title=f'Previsão de 5 dias de temperaturas da cidade de {cidade}',
@@ -91,11 +119,12 @@ def consulta_previsao_hoje(
         )
         fig.show()        
 
-        # plt.show()
-
         # print(df)
 
+
     else:
+        for i in track(range(20), description="Processando..."):
+            time.sleep(0.5)  # Simulate work being done
         dados = previsao_hoje(nome_da_cidade, u, g)
 
         pais = dados[0]['pais']
