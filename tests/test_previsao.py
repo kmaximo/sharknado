@@ -2,10 +2,12 @@ from sharknado.previsao import previsao_hoje
 
 
 def test_previsao_true():
-    # print(previsao_hoje('recife'))
-    ...
+
+    result = previsao_hoje('recife', False, False)
+    assert 'Recife' in result[0]['cidade']
 
 
 def test_previsao_erro():
-    # print(previsao_hoje('sa paulo'))
+    # result = previsao_hoje('sa paulo', False, False)
+    # assert 'Sao Paulo' in result[0]['cidade']
     ...
